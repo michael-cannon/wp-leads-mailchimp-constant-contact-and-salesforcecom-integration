@@ -1,5 +1,5 @@
 === WP-Leads ===
-Contributors: OccamsRazzor
+Contributors: OccamsRazzor,comprock
 Donate link: http://www.wpleads.com/donate
 Tags: MailChimp, Constant Contact, SalesForce.com, Integration
 Requires at least: 3.0.0
