@@ -3,6 +3,7 @@
 ## master
 
 ## notices
+* Add continuous integration helpers
 * Add developer docs
 * Clean up PHP notices
 * Consolidate install add_option/update_option calls
@@ -10,6 +11,7 @@
 * Corect `wp_enqueue_scripts` action call
 * Correct __FILENAME__ constant usage
 * General bail if `get_wp_settings` is empty
+* Prep for localization
 * Test current actions
 * Update support link
 * Use `delete_option` on deactivate than `update_option` which leaves records

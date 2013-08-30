@@ -45,7 +45,7 @@ function wpleads_registration_form_registered($user_id,$password="",$meta=array(
 }
 function wpleads_setup_display(){
 	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
+		wp_die( __('You do not have sufficient permissions to access this page.', 'wp-leads-mailchimp-constant-contact-and-salesforcecom-integration') );
 	}
 	WPLeadsInterfaceView::head();
 	if(isset($_REQUEST["wpleads_setup_post"])){
@@ -57,7 +57,7 @@ function wpleads_setup_display(){
 }
 function wpleads_configuration_options() {
 	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
+		wp_die( __('You do not have sufficient permissions to access this page.', 'wp-leads-mailchimp-constant-contact-and-salesforcecom-integration') );
 	}
 	WPLeadsInterfaceView::head();
 	if(isset($_REQUEST["configure_mailchimp"])){
@@ -98,7 +98,7 @@ function wpleads_configuration_options() {
 
 function wpleads_help_display(){
 	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
+		wp_die( __('You do not have sufficient permissions to access this page.', 'wp-leads-mailchimp-constant-contact-and-salesforcecom-integration') );
 	}
 	echo '<div class="wrap">';
 	echo '<p>This is Going to be Very Helpful :)</p>';

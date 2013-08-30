@@ -1,0 +1,19 @@
+# Copyright (C) 2013 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wp-leads-mailchimp-constant-"
+"contact-and-salesforcecom-integration\n"
+"POT-Creation-Date: 2013-08-30 13:34:40+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: interface/interface.plugin.php:48 interface/interface.plugin.php:60
+#: interface/interface.plugin.php:101
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
