@@ -1,6 +1,6 @@
 <?php
 class WPLeadsCommentsView{
-	function commentForm(){
+	static function commentForm(){
 		$form=WPLeadsInterface::get_wp_settings();
 		$checked=($form["comment_selected"])?" checked":"";
 		?>

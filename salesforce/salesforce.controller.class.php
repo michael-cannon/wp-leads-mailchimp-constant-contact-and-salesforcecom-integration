@@ -7,7 +7,7 @@ class WPLeadsSalesForceController{
      * @return array on error.  Typical errors include: invalid API Key, or No API Key provided.  On Success, SalesForce Integration settings are updated
      * with the new API key.
      */
-	function configureSalesforce(){
+	static function configureSalesforce(){
 		//configuration variable in options - wplead_salesforce_settings
 		//check that the API key was provided.  If not, return with error
 		$apikey=trim($_REQUEST["salesforce_api_key"]);
@@ -66,7 +66,7 @@ class WPLeadsSalesForceController{
      * @return string containing the API key on success.  On Error, return array with the corresponding error message.
      * 
      */
-	function get_valid_salesforce_key(){
+	static function get_valid_salesforce_key(){
 		//check to make sure this is not the initial configuration
 		$settings=get_option("wpleads_salesforce_apikey");
 		if(!empty($settings["apikey"])){
@@ -97,8 +97,11 @@ class WPLeadsSalesForceController{
      * If the API key is no longer valid, return nothing.  This avoids an empty SalesForce List Integration option within the Add / Edit Wplead dialogs.
      * 
      */
-	function get_lists(){
+	static function get_lists(){
 		$key=WPLeadsSalesForceController::get_wp_settings();
+		if ( empty( $key ) )
+			return;
+
 		$listSelection=null;
 		$currentSalesForceID=null;
 		if(!empty($key["apikey"])){
@@ -117,7 +120,7 @@ class WPLeadsSalesForceController{
      * @return string listid
      *
      */
-	function get_list_id(){
+	static function get_list_id(){
 		$settings=get_option("wpleads_salesforce_listid"); 
 		if(!empty($settings["listid"])){
 			return $settings["listid"];
@@ -131,8 +134,11 @@ class WPLeadsSalesForceController{
      * @param string $email - the email address to subscribe
      * 
      */
-	function list_subscribe($firstname,$lastname,$email){
+	static function list_subscribe($firstname,$lastname,$email){
 		$settings=WPLeadsSalesForceController::get_wp_settings();
+		if ( empty( $settings ) )
+			return;
+
 		$type=($settings["listid"]==1)?"Contact":"Lead";
 		$sf = WPLeadsSalesForceController::getSalesForceConnection(null,true);
 		$postFields["firstName"]=$firstname;
@@ -145,9 +151,12 @@ class WPLeadsSalesForceController{
 		}
 		$result=$sf->create(array($postFields),$type);
 	}
-	function getSalesForceConnection($credentials=null,$frontend=false){
+	static function getSalesForceConnection($credentials=null,$frontend=false){
 		$loc=($frontend)?"":"../";
 		$creds=(empty($credentials))?WPLeadsSalesForceController::get_wp_settings():$credentials;
+		if ( empty( $creds ) )
+			return;
+
 		$crmHandle = new SforceEnterpriseClient();
 		try {
 			$crmHandle->createConnection($loc."wp-content/plugins/wp-leads-mailchimp-constant-contact-and-salesforcecom-integration/salesforce/soapclient/enterprise.wsdl.xml");
@@ -162,31 +171,35 @@ class WPLeadsSalesForceController{
 		}
 		return $crmHandle;
 	}
-	function set_salesforce_apiusername($key){
+	static function set_salesforce_apiusername($key){
 		update_option('wpleads_salesforce_apiusername', array("apiusername"=>$key));
 	}
-	function set_salesforce_apipassword($key){
+	static function set_salesforce_apipassword($key){
 		update_option('wpleads_salesforce_apipassword', array("apipassword"=>$key));
 	}
-	function set_salesforce_apikey($key){
+	static function set_salesforce_apikey($key){
 		update_option('wpleads_salesforce_apikey', array("apikey"=>$key));
 	}
-	function set_salesforce_listid($listid){
+	static function set_salesforce_listid($listid){
 		update_option('wpleads_salesforce_listid', array("listid"=>$listid));
 	}
-	function set_salesforce_last_updated(){
+	static function set_salesforce_last_updated(){
 		update_option('wpleads_salesforce_last_updated', array("last_updated"=>date("m/d/Y h:i:s")));
 	}
-	function set_salesforce_configured($isConfigured){
+	static function set_salesforce_configured($isConfigured){
 		update_option('wpleads_salesforce_configured', array("configured"=>$isConfigured));
 	}
-	function get_wp_settings(){
+	static function get_wp_settings(){
 		$apiusername=get_option("wpleads_salesforce_apiusername");
 		$apipassword=get_option("wpleads_salesforce_apipassword");
 		$apikey=get_option("wpleads_salesforce_apikey");
 		$listid=get_option("wpleads_salesforce_listid");
 		$last_updated=get_option("wpleads_salesforce_last_updated");
 		$configured=get_option("wpleads_salesforce_configured");
+
+		if ( empty( $apiusername ) || empty( $apipassword ) || empty( $apikey ) || empty( $listid ) || empty( $last_updated ) || empty( $configured ) )
+			return;
+
 		$return=array(
 			"apiusername"=>$apiusername["apiusername"],
 			"apipassword"=>$apipassword["apipassword"],

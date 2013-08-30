@@ -6,7 +6,7 @@ class WPLeadsEmailAccountView{
      * @param array $messages if provided, delivers status updates to the user, as they occur.
      *
      */
-	function configureEmailaccount($messages=null){
+	static function configureEmailaccount($messages=null){
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$currentCredentials=WPLeadsEmailAccountController::get_wp_settings();
 		WPLeadsInterfaceView::formJquery();

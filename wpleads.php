@@ -49,125 +49,111 @@ Usage: Set as many or as few integration options as you like.  Once configured, 
 */
 ini_set('soap.wsdl_cache_enabled', 0);
 //mail chimp configuration
-require_once("mailchimp/MCAPI.class.php"); 
-require_once("mailchimp/mailchimp.controller.class.php"); 
-require_once("mailchimp/mailchimp.view.class.php"); 
+require_once('mailchimp/MCAPI.class.php'); 
+require_once('mailchimp/mailchimp.controller.class.php'); 
+require_once('mailchimp/mailchimp.view.class.php'); 
 //constant contact configuration
-require_once("constantcontact/cc_class.php");
-require_once("constantcontact/constantcontact.controller.class.php");
-require_once("constantcontact/constantcontact.view.class.php");
+require_once('constantcontact/cc_class.php');
+require_once('constantcontact/constantcontact.controller.class.php');
+require_once('constantcontact/constantcontact.view.class.php');
 //Email Account Configuration
-require_once("emailaccount/emailaccount.controller.class.php");
-require_once("emailaccount/emailaccount.view.class.php");
+require_once('emailaccount/emailaccount.controller.class.php');
+require_once('emailaccount/emailaccount.view.class.php');
 //SalesForce.com
-require_once("salesforce/soapclient/SforceEnterpriseClient.php");
-require_once("salesforce/salesforce.controller.class.php");
-require_once("salesforce/salesforce.view.class.php");
+require_once('salesforce/soapclient/SforceEnterpriseClient.php');
+require_once('salesforce/salesforce.controller.class.php');
+require_once('salesforce/salesforce.view.class.php');
 //general interface configuration
-require_once("interface/interface.class.php");
-require_once("interface/interface.view.class.php");
-require_once("interface/interface.plugin.php"); 
+require_once('interface/interface.class.php');
+require_once('interface/interface.view.class.php');
+require_once('interface/interface.plugin.php'); 
 //comments integration configuration
-require_once("comments/comments.controller.class.php");
-require_once("comments/comments.view.class.php");
+require_once('comments/comments.controller.class.php');
+require_once('comments/comments.view.class.php');
 
 function wpleads_install(){
 	//run install routines, setup basic Integration variables within the options environment.
-	add_option("wplead_active","true","","yes");
-	update_option("wplead_active","true");
-	add_option("wplead_settings","","","yes");
+	add_option('wplead_active','true','','yes');
+	add_option('wplead_settings','','','yes');
 	//mailchimp variables
-	add_option("wpleads_mailchimp_apikey","","","yes");
-	add_option("wpleads_mailchimp_listid","","","yes");
-	add_option("wpleads_mailchimp_last_updated","","","yes");
-	update_option("wpleads_mailchimp_last_updated", array("last_updated"=>date("m/d/Y h:i:s")));
-	add_option("wpleads_mailchimp_configured","","","yes");
-	update_option("wpleads_mailchimp_configured", array("configured"=>0));
+	add_option('wpleads_mailchimp_apikey','','','yes');
+	add_option('wpleads_mailchimp_listid','','','yes');
+	add_option('wpleads_mailchimp_last_updated',array('last_updated'=>date('m/d/Y h:i:s')),'','yes');
+	add_option('wpleads_mailchimp_configured',array('configured'=>0),'','yes');
 	//constant contact variables
-	add_option("wpleads_constantcontact_apiusername","","","yes");
-	add_option("wpleads_constantcontact_apipassword","","","yes");
-	add_option("wpleads_constantcontact_apikey","","","yes");
-	add_option("wpleads_constantcontact_listid","","","yes");
-	add_option("wpleads_constantcontact_last_updated","","","yes");
-	update_option("wpleads_constantcontact_last_updated", array("last_updated"=>date("m/d/Y h:i:s")));
-	add_option("wpleads_constantcontact_configured","","","yes");
-	update_option("wpleads_constantcontact_configured", array("configured"=>0));
+	add_option('wpleads_constantcontact_apiusername','','','yes');
+	add_option('wpleads_constantcontact_apipassword','','','yes');
+	add_option('wpleads_constantcontact_apikey','','','yes');
+	add_option('wpleads_constantcontact_listid','','','yes');
+	add_option('wpleads_constantcontact_last_updated',array('last_updated'=>date('m/d/Y h:i:s')),'','yes');
+	add_option('wpleads_constantcontact_configured',array('configured'=>0),'','yes');
 	//email address variables
-	add_option("wpleads_emailaccount_email","","","yes");
-	add_option("wpleads_emailaccount_last_updated","","","yes");
-	update_option("wpleads_emailaccount_last_updated", array("last_updated"=>date("m/d/Y h:i:s")));
-	add_option("wpleads_emailaccount_configured","","","yes");
-	update_option("wpleads_emailaccount_configured", array("configured"=>0));
+	add_option('wpleads_emailaccount_email','','','yes');
+	add_option('wpleads_emailaccount_last_updated',array('last_updated'=>date('m/d/Y h:i:s')),'','yes');
+	add_option('wpleads_emailaccount_configured',array('configured'=>0),'','yes');
 	//Salesforce.com
-	add_option("wpleads_salesforce_apiusername","","","yes");
-	add_option("wpleads_salesforce_apipassword","","","yes");
-	add_option("wpleads_salesforce_apikey","","","yes");
-	add_option("wpleads_salesforce_listid","","","yes");
-	add_option("wpleads_salesforce_last_updated","","","yes");
-	update_option("wpleads_salesforce_last_updated", array("last_updated"=>date("m/d/Y h:i:s")));
-	add_option("wpleads_salesforce_configured","","","yes");
-	update_option("wpleads_salesforce_configured", array("configured"=>0));
+	add_option('wpleads_salesforce_apiusername','','','yes');
+	add_option('wpleads_salesforce_apipassword','','','yes');
+	add_option('wpleads_salesforce_apikey','','','yes');
+	add_option('wpleads_salesforce_listid','','','yes');
+	add_option('wpleads_salesforce_last_updated',array('last_updated'=>date('m/d/Y h:i:s')),'','yes');
+	add_option('wpleads_salesforce_configured',array('configured'=>0),'','yes');
 	//setup
-	add_option("wpleads_setup_registration_activated","","","yes");
-	update_option("wpleads_setup_registration_activated",array("activated"=>0));
-	add_option("wpleads_setup_registration_firstlast","","","yes");
-	update_option("wpleads_setup_registration_firstlast",array("firstlast"=>1));
-	add_option("wpleads_setup_registration_text","","","yes");
-	update_option("wpleads_setup_registration_text",array("text"=>"Join our Mailing List?"));
-	add_option("wpleads_setup_registration_selected","","","yes");
-	update_option("wpleads_setup_registration_selected",array("selected"=>1));
-	add_option("wpleads_setup_commentform_activated","","","yes");
-	update_option("wpleads_setup_commentform_activated",array("comment_activated"=>0));
-	add_option("wpleads_setup_commentform_text","","","yes");
-	update_option("wpleads_setup_commentform_text",array("comment_text"=>"Join our Mailing List?"));
-	add_option("wpleads_setup_commentform_selected","","","yes");
-	update_option("wpleads_setup_commentform_selected",array("comment_selected"=>1));
+	add_option('wpleads_setup_registration_activated',array('activated'=>0),'','yes');
+	add_option('wpleads_setup_registration_firstlast',array('firstlast'=>1),'','yes');
+	add_option('wpleads_setup_registration_text',array('text'=>'Join our Mailing List?'),'','yes');
+	add_option('wpleads_setup_registration_selected',array('selected'=>1),'','yes');
+	add_option('wpleads_setup_commentform_activated',array('comment_activated'=>0),'','yes');
+	add_option('wpleads_setup_commentform_text',array('comment_text'=>'Join our Mailing List?'),'','yes');
+	add_option('wpleads_setup_commentform_selected',array('comment_selected'=>1),'','yes');
 }
 
 function wpleads_deactivate(){
-	update_option("wplead_active","false"); //set the activation flag to false
-	update_option('wplead_settings', ""); //reset the API key to null.
+	delete_option('wplead_active'); //set the activation flag to false
+	delete_option('wplead_settings'); //reset the API key to null.
 	//mailchimp
-	update_option('wpleads_mailchimp_apikey','');
-	update_option('wpleads_mailchimp_listid','');
-	update_option('wpleads_mailchimp_last_updated','');
-	update_option('wpleads_mailchimp_configured','');
+	delete_option('wpleads_mailchimp_apikey');
+	delete_option('wpleads_mailchimp_listid');
+	delete_option('wpleads_mailchimp_last_updated');
+	delete_option('wpleads_mailchimp_configured');
 	//constant contact variables
-	update_option("wpleads_constantcontact_apiusername",'');
-	update_option("wpleads_constantcontact_apipassword",'');
-	update_option("wpleads_constantcontact_apikey",'');
-	update_option("wpleads_constantcontact_listid",'');
-	update_option("wpleads_constantcontact_last_updated",'');
-	update_option("wpleads_constantcontact_configured",'');
+	delete_option('wpleads_constantcontact_apiusername');
+	delete_option('wpleads_constantcontact_apipassword');
+	delete_option('wpleads_constantcontact_apikey');
+	delete_option('wpleads_constantcontact_listid');
+	delete_option('wpleads_constantcontact_last_updated');
+	delete_option('wpleads_constantcontact_configured');
 	//email account
-	update_option("wpleads_emailaccount_email",'');
-	update_option("wpleads_emailaccount_last_updated",'');
-	update_option("wpleads_emailaccount_configured",'');
+	delete_option('wpleads_emailaccount_email');
+	delete_option('wpleads_emailaccount_last_updated');
+	delete_option('wpleads_emailaccount_configured');
 	//SalesForce.com
-	update_option("wpleads_salesforce_apiusername",'');
-	update_option("wpleads_salesforce_apipassword",'');
-	update_option("wpleads_salesforce_apikey",'');
-	update_option("wpleads_salesforce_listid",'');
-	update_option("wpleads_salesforce_last_updated",'');
-	update_option("wpleads_salesforce_configured",'');
+	delete_option('wpleads_salesforce_apiusername');
+	delete_option('wpleads_salesforce_apipassword');
+	delete_option('wpleads_salesforce_apikey');
+	delete_option('wpleads_salesforce_listid');
+	delete_option('wpleads_salesforce_last_updated');
+	delete_option('wpleads_salesforce_configured');
 	//setup
-	update_option("wpleads_setup_registration_activated","");
-	update_option("wpleads_setup_registration_firstlast","");
-	update_option("wpleads_setup_registration_selected","");
-	update_option("wpleads_setup_registration_text","");
-	update_option("wpleads_setup_commentform_activated","");
-	update_option("wpleads_setup_commentform_selected","");
-	update_option("wpleads_setup_commentform_text","");
-	
+	delete_option('wpleads_setup_registration_activated');
+	delete_option('wpleads_setup_registration_firstlast');
+	delete_option('wpleads_setup_registration_selected');
+	delete_option('wpleads_setup_registration_text');
+	delete_option('wpleads_setup_commentform_activated');
+	delete_option('wpleads_setup_commentform_selected');
+	delete_option('wpleads_setup_commentform_text');
 }
 
 //register basic activation / deactivation hooks for the MailChimp Integration
-register_activation_hook(__FILE__,"wpleads_install");
-register_deactivation_hook(__FILE__,"wpleads_deactivate");
+register_activation_hook(__FILE__,'wpleads_install');
+register_deactivation_hook(__FILE__,'wpleads_deactivate');
 
 //define some basic variables for the system.
-define("WPLEADS_PLUGINPATH","/".plugin_basename(dirname(__FILENAME__))."/");
+define('WPLEADS_PLUGINPATH','/'.plugin_basename(dirname(__FILE__)).'/');
 
 //bring in the Jquery
-wp_enqueue_script("jquery");
+add_action( 'wp_enqueue_scripts', 'wpleads_enqueue_script' );
+function wpleads_enqueue_script() {
+	wp_enqueue_script('jquery');
+}
 ?>

@@ -7,7 +7,7 @@ class WPLeadsMailChimpController{
      * @return array on error.  Typical errors include: invalid API Key, or No API Key provided.  On Success, MailChimp Integration settings are updated
      * with the new API key.
      */
-	function configureMailchimp(){
+	static function configureMailchimp(){
 		//configuration variable in options - wplead_mailchimp_settings
 		//check that the API key was provided.  If not, return with error
 		$apikey=trim($_REQUEST["mailchimp_api_key"]);
@@ -59,7 +59,7 @@ class WPLeadsMailChimpController{
      * @return string containing the API key on success.  On Error, return array with the corresponding error message.
      * 
      */
-	function get_valid_mailchimp_key(){
+	static function get_valid_mailchimp_key(){
 		//check to make sure this is not the initial configuration
 		$settings=get_option("wpleads_mailchimp_apikey");
 		if(!empty($settings["apikey"])){
@@ -89,7 +89,7 @@ class WPLeadsMailChimpController{
      * If the API key is no longer valid, return nothing.  This avoids an empty MailChimp List Integration option within the Add / Edit Wplead dialogs.
      * 
      */
-	function get_lists(){
+	static function get_lists(){
 		$key=WPLeadsMailChimpController::get_valid_mailchimp_key();
 		$listSelection=null;
 		$currentMailChimpID=null;
@@ -108,7 +108,7 @@ class WPLeadsMailChimpController{
 		return $listSelection;
 	}
 	
-	function get_list_id(){
+	static function get_list_id(){
 		$settings=get_option("wpleads_mailchimp_listid"); 
 		if(!empty($settings["listid"])){
 			return $settings["listid"];
@@ -122,8 +122,11 @@ class WPLeadsMailChimpController{
      * @param string $email - the email address to subscribe
      * 
      */
-	function list_subscribe($fname,$lname,$email){
+	static function list_subscribe($fname,$lname,$email){
 		$mailchimp=WPLeadsMailChimpController::get_wp_settings();
+		if ( empty( $mailchimp ) )
+			return;
+
 		$mailChimpListID=$mailchimp["listid"];
 		//check to make sure the list ID is valid and available
 		if($mailChimpListID){
@@ -137,23 +140,27 @@ class WPLeadsMailChimpController{
 			}
 		}
 	}
-	function set_mailchimp_apikey($key){
+	static function set_mailchimp_apikey($key){
 		update_option('wpleads_mailchimp_apikey', array("apikey"=>$key));
 	}
-	function set_mailchimp_listid($listid){
+	static function set_mailchimp_listid($listid){
 		update_option('wpleads_mailchimp_listid', array("listid"=>$listid));
 	}
-	function set_mailchimp_last_updated(){
+	static function set_mailchimp_last_updated(){
 		update_option('wpleads_mailchimp_last_updated', array("last_updated"=>date("m/d/Y h:i:s")));
 	}
-	function set_mailchimp_configured($isConfigured){
+	static function set_mailchimp_configured($isConfigured){
 		update_option('wpleads_mailchimp_configured', array("configured"=>$isConfigured));
 	}
-	function get_wp_settings(){
+	static function get_wp_settings(){
 		$apikey=get_option("wpleads_mailchimp_apikey");
 		$listid=get_option("wpleads_mailchimp_listid");
 		$last_updated=get_option("wpleads_mailchimp_last_updated");
 		$configured=get_option("wpleads_mailchimp_configured");
+
+		if ( empty( $apikey ) || empty( $listid ) || empty( $last_updated ) || empty( $configured ) )
+			return;
+
 		$return=array(
 			"apikey"=>$apikey["apikey"],
 			"listid"=>$listid["listid"],

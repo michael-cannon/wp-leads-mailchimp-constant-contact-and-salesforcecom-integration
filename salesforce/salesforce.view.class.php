@@ -6,7 +6,7 @@ class WPLeadsSalesForceView{
      * @param array $messages if provided, delivers status updates to the user, as they occur.
      *
      */
-	function configureSalesforce($messages=null){
+	static function configureSalesforce($messages=null){
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$check=WPLeadsSalesForceController::get_valid_salesforce_key();
 		$currentCredentials=WPLeadsSalesForceController::get_wp_settings();

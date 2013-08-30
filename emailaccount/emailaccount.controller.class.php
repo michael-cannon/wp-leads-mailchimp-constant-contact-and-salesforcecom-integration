@@ -7,7 +7,7 @@ class WPLeadsEmailAccountController{
      * @return array on error.  Typical errors include: invalid email address.  On Success, EmailAccount Integration settings are updated
      * with the new API key.
      */
-	function configureEmailaccount(){
+	static function configureEmailaccount(){
 		$email=trim($_REQUEST["emailaccount_email"]);
 		//if the email address is valid - enter it into the system.
 		if(WPLeadsEmailAccountController::realEmail($email,false)){
@@ -35,8 +35,11 @@ class WPLeadsEmailAccountController{
      * @param string $email - the email address to subscribe
      * 
      */
-	function list_subscribe($wplead_id,$attendee_id,$attendee_fname,$attendee_lname,$attendee_email){
-		WPLeadsEmailAccountController::get_wp_settings();
+	static function list_subscribe($wplead_id,$attendee_id,$attendee_fname,$attendee_lname,$attendee_email){
+		$settings = WPLeadsEmailAccountController::get_wp_settings();
+		if ( empty( $settings ) )
+			return;
+
 		$ccContactOBJ = new WPLeads_CC_Contact($settings["apiusername"],$settings["apipassword"],$settings["apikey"]);
 		$postFields["lists"]=array($settings["listid"]);
 		$postFields["email_address"]=$_POST["user_email"];
@@ -45,7 +48,7 @@ class WPLeadsEmailAccountController{
 			//error handling fun
 		}
 	}
-	function realEmail($email,$acceptempty=false){
+	static function realEmail($email,$acceptempty=false){
 		if($acceptempty){
 			if(!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$", rtrim(ltrim($email))) && $email!='') {
 				return false;
@@ -57,20 +60,24 @@ class WPLeadsEmailAccountController{
 		}
 		return true;                                         
 	}
-	function set_emailaccount_email($email){
+	static function set_emailaccount_email($email){
 		update_option('wpleads_emailaccount_email', array("email"=>$email));
 	}
-	function set_emailaccount_last_updated(){
+	static function set_emailaccount_last_updated(){
 		update_option('wpleads_emailaccount_last_updated', array("last_updated"=>date("m/d/Y h:i:s")));
 	}
-	function set_emailaccount_configured($isConfigured){
+	static function set_emailaccount_configured($isConfigured){
 		$isConfigured=($isConfigured)?"Yes":"No";
 		update_option('wpleads_emailaccount_configured', array("configured"=>$isConfigured));
 	}
-	function get_wp_settings(){
+	static function get_wp_settings(){
 		$email=get_option("wpleads_emailaccount_email");
 		$last_updated=get_option("wpleads_emailaccount_last_updated");
 		$configured=get_option("wpleads_emailaccount_configured");
+
+		if ( empty( $email ) || empty( $last_updated ) || empty( $configured ) )
+			return;
+
 		return array(
 			"email"=>$email["email"],
 			"last_updated"=>$last_updated["last_updated"],

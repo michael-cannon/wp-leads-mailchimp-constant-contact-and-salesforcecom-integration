@@ -1,6 +1,6 @@
 <?php 
 class WPLeadsCommentsController{
-	function processSub(){
+	static function processSub(){
 		$post=WPLeadsInterface::sanitizeData($_REQUEST);
 		if(isset($post["joinlist"])){ //awesome - they want to join our list :)
 			$firstname=$post["author"];

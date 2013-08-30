@@ -6,7 +6,7 @@ class WPLeadsMailChimpView{
      * @param array $messages if provided, delivers status updates to the user, as they occur.
      *
      */
-	function configureMailchimp($messages=null){
+	static function configureMailchimp($messages=null){
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$currentKey=WPLeadsMailChimpController::get_valid_mailchimp_key();
 		$lists=WPLeadsMailChimpController::get_lists();

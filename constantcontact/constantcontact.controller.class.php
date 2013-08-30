@@ -7,7 +7,7 @@ class WPLeadsConstantContactController{
      * @return array on error.  Typical errors include: invalid API Key, or No API Key provided.  On Success, ConstantContact Integration settings are updated
      * with the new API key.
      */
-	function configureConstantcontact(){
+	static function configureConstantcontact(){
 		//configuration variable in options - wplead_constantcontact_settings
 		//check that the API key was provided.  If not, return with error
 		$apikey=trim($_REQUEST["constantcontact_api_key"]);
@@ -63,11 +63,14 @@ class WPLeadsConstantContactController{
      * @return string containing the API key on success.  On Error, return array with the corresponding error message.
      * 
      */
-	function get_valid_constantcontact_key(){
+	static function get_valid_constantcontact_key(){
 		//check to make sure this is not the initial configuration
 		$settings=get_option("wpleads_constantcontact_apikey");
 		if(!empty($settings["apikey"])){
 			$creds=WPLeadsConstantContactController::get_wp_settings();
+			if ( empty( $creds ) )
+				return;
+
 			$api = new WPLeads_CC_List($creds["apiusername"],$creds["apipassword"],$creds["apikey"]); 
 			$test = $api->testCredentials();
 			//if the current key is no longer valid, reset the key to null and return an error to the user, requesting a new key.  Otherwise
@@ -96,8 +99,11 @@ class WPLeadsConstantContactController{
      * If the API key is no longer valid, return nothing.  This avoids an empty ConstantContact List Integration option within the Add / Edit Wplead dialogs.
      * 
      */
-	function get_lists(){
+	static function get_lists(){
 		$key=WPLeadsConstantContactController::get_wp_settings();
+		if ( empty( $key ) )
+			return;
+
 		$listSelection=null;
 		$currentConstantContactID=null;
 		if(!empty($key["apikey"])){
@@ -115,7 +121,7 @@ class WPLeadsConstantContactController{
 		return $listSelection;
 	}
 	
-	function get_list_id(){
+	static function get_list_id(){
 		$settings=get_option("wpleads_constantcontact_listid"); 
 		if(!empty($settings["listid"])){
 			return $settings["listid"];
@@ -128,8 +134,11 @@ class WPLeadsConstantContactController{
      * @param string $email - the email address to subscribe
      * 
      */
-	function list_subscribe($firstname,$lastname,$email){
+	static function list_subscribe($firstname,$lastname,$email){
 		$settings=WPLeadsConstantContactController::get_wp_settings();
+		if ( empty( $settings ) )
+			return;
+
 		$ccContactOBJ = new WPLeads_CC_Contact($settings["apiusername"],$settings["apipassword"],$settings["apikey"]);
 		$postFields["lists"]=array($settings["listid"]);
 		$postFields["first_name"]=$firstname;
@@ -139,31 +148,35 @@ class WPLeadsConstantContactController{
 		if (!$ccContactOBJ->addSubscriber($contactXML)) {
 		}
 	}
-	function set_constantcontact_apiusername($key){
+	static function set_constantcontact_apiusername($key){
 		update_option('wpleads_constantcontact_apiusername', array("apiusername"=>$key));
 	}
-	function set_constantcontact_apipassword($key){
+	static function set_constantcontact_apipassword($key){
 		update_option('wpleads_constantcontact_apipassword', array("apipassword"=>$key));
 	}
-	function set_constantcontact_apikey($key){
+	static function set_constantcontact_apikey($key){
 		update_option('wpleads_constantcontact_apikey', array("apikey"=>$key));
 	}
-	function set_constantcontact_listid($listid){
+	static function set_constantcontact_listid($listid){
 		update_option('wpleads_constantcontact_listid', array("listid"=>$listid));
 	}
-	function set_constantcontact_last_updated(){
+	static function set_constantcontact_last_updated(){
 		update_option('wpleads_constantcontact_last_updated', array("last_updated"=>date("m/d/Y h:i:s")));
 	}
-	function set_constantcontact_configured($isConfigured){
+	static function set_constantcontact_configured($isConfigured){
 		update_option('wpleads_constantcontact_configured', array("configured"=>$isConfigured));
 	}
-	function get_wp_settings(){
+	static function get_wp_settings(){
 		$apiusername=get_option("wpleads_constantcontact_apiusername");
 		$apipassword=get_option("wpleads_constantcontact_apipassword");
 		$apikey=get_option("wpleads_constantcontact_apikey");
 		$listid=get_option("wpleads_constantcontact_listid");
 		$last_updated=get_option("wpleads_constantcontact_last_updated");
 		$configured=get_option("wpleads_constantcontact_configured");
+
+		if ( empty( $apiusername ) || empty( $apipassword ) || empty( $apikey ) || empty( $listid ) || empty( $last_updated ) || empty( $configured ) )
+			return;
+
 		$return = array(
 			"apiusername"=>$apiusername["apiusername"],
 			"apipassword"=>$apipassword["apipassword"],

@@ -1,18 +1,18 @@
 <?php
 class WPLeadsInterfaceView{
-	function head(){
+	static function head(){
 		?>
 		<div style="margin-top: 15px;">
 			<div class="wrap">
 			<?
 	}
-	function foot(){
+	static function foot(){
 		?>
 			</div>
 		</div>
 		<?
 	}
-	function formJquery(){
+	static function formJquery(){
 		?>
 				<script type="text/javascript">
 				$wpleads = jQuery.noConflict();
@@ -25,7 +25,7 @@ class WPLeadsInterfaceView{
 				</script>
 		<?
 	}
-	function configurationTable(){
+	static function configurationTable(){
 		$mailchimp=WPLeadsMailChimpController::get_wp_settings();
 		$constantcontact=WPLeadsConstantContactController::get_wp_settings();
 		$email=WPLeadsEmailAccountController::get_wp_settings();
@@ -60,7 +60,7 @@ class WPLeadsInterfaceView{
 		</table>
 		<?
 	}
-	function wpleadsSetup($messages=null){
+	static function wpleadsSetup($messages=null){
 		$setup=WPLeadsInterface::get_wp_settings();
 		WPLeadsInterfaceView::formJquery();
 		?>
@@ -134,7 +134,7 @@ class WPLeadsInterfaceView{
 										<h4>Join Our Mailing List Text</h4> <p>This is used to ask whether the user would like to join your mailing list</p>
 										<h4>Default to Yes</h4> <p>Set the default response to 'Yes'. </p>
 										<h4>Include first and last name?</h4> <p>Select Yes to retrieve the user's first and last name during the registration process.</p>
-										<h4>Activate:</h4> <p>By activating WP-Leads on the Registration Form - users will be asked to join your mailing list during the WordPress registration process found at (wp-login.php?action=register).  By activating WP-Leads on the Comments Form - users will be asked to join as they are commenting on your site. The user's email address is seamlessly sent to one or all of the following Lead Management Systems (MailChimp, Constant Contact, or SalesForce.com).  You can configure these integrations by <br /><a href="?page=wpleads_configuration">clicking here.</a></p> 
+										<h4>Activate:</h4> <p>By activating WP-Leads on the Registration Form - users will be asked to join your mailing list during the WordPress registration process found at (wp-login.php?action=register).  By activating WP-Leads on the Comments Form - users will be asked to join as they are commenting on your site. The user's email address is seamlessly sent to one or all of the following Lead Management Systems (MailChimp, Constant Contact, or SalesForce.com).  You can configure these integrations by <a href="?page=wpleads_configuration">clicking here</a>.</p> 
 									</div>
 								</div>							
 							</div>
@@ -143,7 +143,7 @@ class WPLeadsInterfaceView{
 				</form>
 	<?
 	}
-	function registrationForm(){
+	static function registrationForm(){
 		$post=WPLeadsInterface::sanitizeData($_REQUEST);
 		$firstname=(isset($post["firstname"]))?$post["firstname"]:"";
 		$lastname=(isset($post["lastname"]))?$post["lastname"]:"";
@@ -178,25 +178,26 @@ class WPLeadsInterfaceView{
 		';
 		echo $html;
 	}
-	function helpWPLeadsPlease(){
+	static function helpWPLeadsPlease(){
 		?>
-		<iframe src="http://www.wpleads.com/sponsor/sponsor.html" style="width: 100%; height: 500px; padding: 0px; margin: 0px; border: 0px;">
 		<div style="width: 100%">
-			<h4>Sponsored Services</h4>
-			<a href="http://secure.hostgator.com/~affiliat/cgi-bin/affiliates/clickthru.cgi?id=occamrazor" target="_blank"><?php echo '<img src="' .plugins_url( 'images/hostgator.gif' , dirname(__FILE__) ). '" > ';?></a><a href="http://themeforest.net/category/wordpress?ref=think144" target="_blank"><?php echo '<img src="' .plugins_url( 'images/themeforest.gif' , dirname(__FILE__) ). '" > ';?></a>
+			<h4>Need Support?</h4>
+			<p>Please <a href="http://wordpress.org/support/plugin/wp-leads-mailchimp-constant-contact-and-salesforcecom-integration">request support via the support forums</a>.</p>
 		</div>
-		</iframe>
 		<?
 	}
 	/*************************************************************
 	*All error functionality below is used to facilitate system
 	*messages as they occur - reporting success and error messages.
 	**************************************************************/
-	function displayMessages($messages){
-		WPLeadsInterfaceView::displaySuccess($messages["successes"]);
-		WPLeadsInterfaceView::displayErrors($messages["errors"]);
+	static function displayMessages($messages){
+		if ( ! empty( $messages["successes"] ) )
+			WPLeadsInterfaceView::displaySuccess($messages["successes"]);
+
+		if ( ! empty( $messages["errors"] ) )
+			WPLeadsInterfaceView::displayErrors($messages["errors"]);
 	}
-	function displayErrors($errors){
+	static function displayErrors($errors){
 		if(is_array($errors) && !empty($errors)){
 			echo "<div id=\"message\" class=\"updated below-h2\" style=\"display: none\">";
 			foreach($errors as $error){
@@ -205,7 +206,7 @@ class WPLeadsInterfaceView{
 			echo "</div>";
 		}
 	}
-	function displaySuccess($successes){
+	static function displaySuccess($successes){
 		if(is_array($successes) && !empty($successes)){
 			echo "<div id=\"message\" class=\"updated below-h2\" style=\"display: none\">";
 			foreach($successes as $success){
@@ -218,7 +219,7 @@ class WPLeadsInterfaceView{
 			echo "</div>";
 		}
 	}
-	function errorClass($messages,$field,$justClassName=false){
+	static function errorClass($messages,$field,$justClassName=false){
 		if(is_array($messages)){
 			if(!empty($messages["errorFields"])){
 				if(in_array($field,$messages["errorFields"])){

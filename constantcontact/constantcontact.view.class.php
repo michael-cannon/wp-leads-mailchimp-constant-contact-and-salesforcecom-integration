@@ -6,7 +6,7 @@ class WPLeadsConstantContactView{
      * @param array $messages if provided, delivers status updates to the user, as they occur.
      *
      */
-	function configureConstantcontact($messages=null){
+	static function configureConstantcontact($messages=null){
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$check=WPLeadsConstantContactController::get_valid_constantcontact_key();
 		$currentCredentials=WPLeadsConstantContactController::get_wp_settings();
