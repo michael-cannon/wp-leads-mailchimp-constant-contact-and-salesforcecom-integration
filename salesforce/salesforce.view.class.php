@@ -1,22 +1,24 @@
-<?
-class WPLeadsSalesForceView{
+<?php
+class WPLeadsSalesForceView {
 	/**
-     * Displays the administrator's SalesForce Integration configuration form to retrieve the SalesForce API Key
-     *
-     * @param array $messages if provided, delivers status updates to the user, as they occur.
-     *
-     */
-	static function configureSalesforce($messages=null){
+	 * Displays the administrator's SalesForce Integration configuration form to retrieve the SalesForce API Key
+	 *
+	 * @param array   $messages if provided, delivers status updates to the user, as they occur.
+	 *
+	 */
+
+
+	static function configureSalesforce($messages=null) {
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$check=WPLeadsSalesForceController::get_valid_salesforce_key();
 		$currentCredentials=WPLeadsSalesForceController::get_wp_settings();
 		$lists=WPLeadsSalesForceController::get_lists();
-		if(WPLeadsInterface::isError($check)) { 
+		if (WPLeadsInterface::isError($check)) {
 			$messages["errors"]=array("Your SalesForce.com API key is no longer valid.  Please enter a new API Key below.");
 			$currentKey=null;
 		}
 		WPLeadsInterfaceView::formJquery();
-		?>
+?>
 		<div id="icon-link-manager" class="icon32">
 			<br></div>
 			<h2>SalesForce.com Configuration <a href="?page=wpleads_configuration" class="add-new-h2">Go Back</a>
@@ -49,7 +51,7 @@ class WPLeadsSalesForceView{
 								<?php echo WPLeadsInterfaceView::helpWPLeadsPlease(); ?>
 							</div>
 						</div>
-									
+
 						<div id="post-body">
 							<div id="post-body-content">
 								<div class="stuffbox">
@@ -65,26 +67,28 @@ class WPLeadsSalesForceView{
 										<p>If you do not know how to generate your SalesForce API Token, <a href="http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_concepts_security.htm" target="_blank">click here for more information</a>.</p>
 									</div>
 								</div>
-												
+
 								<div class="stuffbox">
 									<h3>
 										<label for="link_url">Additional SalesForce.com Options </label>
 									</h3>
-													
+
 									<div class="inside">
 										<?php
-										if($lists!=""){
-											echo $lists;
-										}else{
-											echo "<p>You must set your API Credentials before you can configure this option.</p>";
-										}
-										?>
+		if ($lists!="") {
+			echo $lists;
+		}else {
+			echo "<p>You must set your API Credentials before you can configure this option.</p>";
+		}
+?>
 									</div>
-								</div>							
+								</div>
 							</div>
 						</div>
-					</div>						
+					</div>
 				</form>
-<?
+<?php
 	}
+
+
 }

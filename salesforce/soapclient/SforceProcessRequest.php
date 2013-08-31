@@ -4,12 +4,16 @@ abstract class ProcessRequest {
 	public $nextApproverIds;
 }
 
+
 class ProcessSubmitRequest extends ProcessRequest {
 	public $objectId;
 }
 
+
 class ProcessWorkitemRequest extends ProcessRequest {
-  public $action;
-  public $workitemId;
+	public $action;
+	public $workitemId;
 }
+
+
 ?>

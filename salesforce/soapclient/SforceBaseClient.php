@@ -24,18 +24,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once ('SforceEmail.php');
-require_once ('SforceProcessRequest.php');
-require_once ('ProxySettings.php');
-require_once ('SforceHeaderOptions.php');
+require_once 'SforceEmail.php';
+require_once 'SforceProcessRequest.php';
+require_once 'ProxySettings.php';
+require_once 'SforceHeaderOptions.php';
 
 
 /**
  * This file contains one class.
+ *
  * @package SalesforceSoapClient
  */
+
+
 /**
  * SalesforceSoapClient
+ *
  * @package SalesforceSoapClient
  */
 class SforceBaseClient {
@@ -86,10 +90,11 @@ class SforceBaseClient {
 		}
 	}
 
+
 	/**
 	 * Connect method to www.salesforce.com
 	 *
-	 * @param string $wsdl   Salesforce.com Partner WSDL
+	 * @param string  $wsdl Salesforce.com Partner WSDL
 	 */
 	public function createConnection($wsdl, $proxy=null) {
 		$_SERVER['HTTP_USER_AGENT'] = 'Salesforce/PHPToolkit/1.0';
@@ -97,47 +102,49 @@ class SforceBaseClient {
 		$soapClientArray = null;
 		if (phpversion() > '5.1.2') {
 			$soapClientArray = array (
-          'encoding' => 'utf-8',
-          'trace' => 1,
-          'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
+				'encoding' => 'utf-8',
+				'trace' => 1,
+				'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP
 			);
 		} else {
 			$soapClientArray = array (
-          'encoding' => 'utf-8',
-          'trace' => 1
+				'encoding' => 'utf-8',
+				'trace' => 1
 			);
 		}
 
 		if ($proxy != null) {
-  		$proxySettings = array();
-	    $proxySettings['proxy_host'] = $proxy->host;
-		  $proxySettings['proxy_port'] = $proxy->port; // Use an integer, not a string
-  		$proxySettings['proxy_login'] = $proxy->login; 
-      $proxySettings['proxy_password'] = $proxy->password;
+			$proxySettings = array();
+			$proxySettings['proxy_host'] = $proxy->host;
+			$proxySettings['proxy_port'] = $proxy->port; // Use an integer, not a string
+			$proxySettings['proxy_login'] = $proxy->login;
+			$proxySettings['proxy_password'] = $proxy->password;
 
-  		$soapClientArray = array_merge($soapClientArray, $proxySettings);
+			$soapClientArray = array_merge($soapClientArray, $proxySettings);
 		}
 
 		$this->sforce = new SoapClient($wsdl, $soapClientArray);
 		return $this->sforce;
 	}
 
+
 	public function setCallOptions($header) {
 		if ($header != NULL) {
 			$this->callOptions = new SoapHeader($this->namespace, 'CallOptions', array (
-          'client' => $header->client,
-          'defaultNamespace' => $header->defaultNamespace
-			));
+					'client' => $header->client,
+					'defaultNamespace' => $header->defaultNamespace
+				));
 		} else {
 			$this->callOptions = NULL;
 		}
 	}
 
+
 	/**
 	 * Login to Salesforce.com and starts a client session.
 	 *
-	 * @param string $username   Username
-	 * @param string $password   Password
+	 * @param string  $username Username
+	 * @param string  $password Password
 	 *
 	 * @return LoginResult
 	 */
@@ -150,37 +157,42 @@ class SforceBaseClient {
 			$this->sforce->__setSoapHeaders(array($this->loginScopeHeader));
 		}
 		$result = $this->sforce->login(array (
-         'username' => $username,
-         'password' => $password
-		));
+				'username' => $username,
+				'password' => $password
+			));
 		$result = $result->result;
 		$this->_setLoginHeader($result);
 		return $result;
 	}
 
- 	/**
+
+	/**
 	 * log outs from the salseforce system`
 	 *
 	 * @return LogoutResult
 	 */
- 	public function logout() {
-  $this->setHeaders("logout");
+	public function logout() {
+		$this->setHeaders("logout");
 		$arg = new stdClass;
 		return $this->sforce->logout();
 	}
- 
- 	/**
-	 *invalidate Sessions from the salseforce system`
+
+
+
+	/**
+	 * invalidate Sessions from the salseforce system`
 	 *
 	 * @return invalidateSessionsResult
 	 */
- 	public function invalidateSessions() {
-  $this->setHeaders("invalidateSessions");
+	public function invalidateSessions() {
+		$this->setHeaders("invalidateSessions");
 		$arg = new stdClass;
-  $this->logout();
+		$this->logout();
 		return $this->sforce->invalidateSessions();
-	} 
- 
+	}
+
+
+
 	/**
 	 * Specifies the session ID returned from the login server after a successful
 	 * login.
@@ -192,20 +204,22 @@ class SforceBaseClient {
 		$this->setEndPoint($serverURL);
 	}
 
+
 	/**
 	 * Set the endpoint.
 	 *
-	 * @param string $location   Location
+	 * @param string  $location Location
 	 */
 	public function setEndpoint($location) {
 		$this->location = $location;
 		$this->sforce->__setLocation($location);
 	}
 
+
 	private function setHeaders($call=NULL) {
 		$this->sforce->__setSoapHeaders(NULL);
 		$header_array = array (
-		$this->sessionHeader
+			$this->sessionHeader
 		);
 
 		$header = $this->callOptions;
@@ -214,9 +228,9 @@ class SforceBaseClient {
 		}
 
 		if ($call == "create" ||
-		$call == "merge" ||
-		$call == "update" ||
-		$call == "upsert"
+			$call == "merge" ||
+			$call == "update" ||
+			$call == "upsert"
 		) {
 			$header = $this->assignmentRuleHeader;
 			if ($header != NULL) {
@@ -232,9 +246,9 @@ class SforceBaseClient {
 		}
 
 		if ($call == "create" ||
-		$call == "resetPassword" ||
-		$call == "update" ||
-		$call == "upsert"
+			$call == "resetPassword" ||
+			$call == "update" ||
+			$call == "upsert"
 		) {
 			$header = $this->emailHeader;
 			if ($header != NULL) {
@@ -243,11 +257,11 @@ class SforceBaseClient {
 		}
 
 		if ($call == "create" ||
-		$call == "merge" ||
-		$call == "query" ||
-		$call == "retrieve" ||
-		$call == "update" ||
-		$call == "upsert"
+			$call == "merge" ||
+			$call == "query" ||
+			$call == "retrieve" ||
+			$call == "update" ||
+			$call == "upsert"
 		) {
 			$header = $this->mruHeader;
 			if ($header != NULL) {
@@ -263,8 +277,8 @@ class SforceBaseClient {
 		}
 
 		if ($call == "query" ||
-		$call == "queryMore" ||
-		$call == "retrieve") {
+			$call == "queryMore" ||
+			$call == "retrieve") {
 			$header = $this->queryHeader;
 			if ($header != NULL) {
 				array_push($header_array, $header);
@@ -273,56 +287,61 @@ class SforceBaseClient {
 		$this->sforce->__setSoapHeaders($header_array);
 	}
 
+
 	public function setAssignmentRuleHeader($header) {
 		if ($header != NULL) {
 			$this->assignmentRuleHeader = new SoapHeader($this->namespace, 'AssignmentRuleHeader', array (
-             'assignmentRuleId' => $header->assignmentRuleId,
-             'useDefaultRule' => $header->useDefaultRuleFlag
-			));
+					'assignmentRuleId' => $header->assignmentRuleId,
+					'useDefaultRule' => $header->useDefaultRuleFlag
+				));
 		} else {
 			$this->assignmentRuleHeader = NULL;
 		}
 	}
 
+
 	public function setEmailHeader($header) {
 		if ($header != NULL) {
 			$this->emailHeader = new SoapHeader($this->namespace, 'EmailHeader', array (
-             'triggerAutoResponseEmail' => $header->triggerAutoResponseEmail,
-             'triggerOtherEmail' => $header->triggerOtherEmail,
-             'triggerUserEmail' => $header->triggerUserEmail
-			));
+					'triggerAutoResponseEmail' => $header->triggerAutoResponseEmail,
+					'triggerOtherEmail' => $header->triggerOtherEmail,
+					'triggerUserEmail' => $header->triggerUserEmail
+				));
 		} else {
 			$this->emailHeader = NULL;
 		}
 	}
 
+
 	public function setLoginScopeHeader($header) {
 		if ($header != NULL) {
 			$this->loginScopeHeader = new SoapHeader($this->namespace, 'LoginScopeHeader', array (
-        'organizationId' => $header->organizationId,
-        'portalId' => $header->portalId
-			));
+					'organizationId' => $header->organizationId,
+					'portalId' => $header->portalId
+				));
 		} else {
 			$this->loginScopeHeader = NULL;
 		}
 		//$this->setHeaders('login');
 	}
 
+
 	public function setMruHeader($header) {
 		if ($header != NULL) {
 			$this->mruHeader = new SoapHeader($this->namespace, 'MruHeader', array (
-             'updateMru' => $header->updateMruFlag
-			));
+					'updateMru' => $header->updateMruFlag
+				));
 		} else {
 			$this->mruHeader = NULL;
 		}
 	}
 
+
 	public function setSessionHeader($id) {
 		if ($id != NULL) {
 			$this->sessionHeader = new SoapHeader($this->namespace, 'SessionHeader', array (
-             'sessionId' => $id
-			));
+					'sessionId' => $id
+				));
 			$this->sessionId = $id;
 		} else {
 			$this->sessionHeader = NULL;
@@ -330,61 +349,73 @@ class SforceBaseClient {
 		}
 	}
 
+
 	public function setUserTerritoryDeleteHeader($header) {
 		if ($header != NULL) {
 			$this->serTerritoryDeleteHeader = new SoapHeader($this->namespace, 'UserTerritoryDeleteHeader  ', array (
-             'transferToUserId  ' => $header->transferToUserId
-			));
+					'transferToUserId  ' => $header->transferToUserId
+				));
 		} else {
 			$this->mruHeader = NULL;
 		}
 	}
 
+
 	public function setQueryOptions($header) {
 		if ($header != NULL) {
 			$this->queryHeader = new SoapHeader($this->namespace, 'QueryOptions', array (
-             'batchSize' => $header->batchSize
-			));
+					'batchSize' => $header->batchSize
+				));
 		} else {
 			$this->queryHeader = NULL;
 		}
 	}
 
+
 	public function getSessionId() {
 		return $this->sessionId;
 	}
+
 
 	public function getLocation() {
 		return $this->location;
 	}
 
+
 	public function getConnection() {
 		return $this->sforce;
 	}
+
 
 	public function getFunctions() {
 		return $this->sforce->__getFunctions();
 	}
 
+
 	public function getTypes() {
 		return $this->sforce->__getTypes();
 	}
+
 
 	public function getLastRequest() {
 		return $this->sforce->__getLastRequest();
 	}
 
+
 	public function getLastRequestHeaders() {
 		return $this->sforce->__getLastRequestHeaders();
 	}
+
 
 	public function getLastResponse() {
 		return $this->sforce->__getLastResponse();
 	}
 
+
 	public function getLastResponseHeaders() {
 		return $this->sforce->__getLastResponseHeaders();
 	}
+
 
 	protected function _convertToAny($fields) {
 		$anyString = '';
@@ -394,70 +425,79 @@ class SforceBaseClient {
 		return $anyString;
 	}
 
+
 	protected function _create($arg) {
 		$this->setHeaders("create");
 		return $this->sforce->create($arg)->result;
 	}
+
 
 	protected function _merge($arg) {
 		$this->setHeaders("merge");
 		return $this->sforce->merge($arg)->result;
 	}
 
+
 	protected function _process($arg) {
 		$this->setHeaders();
 		return $this->sforce->process($arg)->result;
 	}
+
 
 	protected function _update($arg) {
 		$this->setHeaders("update");
 		return $this->sforce->update($arg)->result;
 	}
 
+
 	protected function _upsert($arg) {
 		$this->setHeaders("upsert");
 		return $this->sforce->upsert($arg)->result;
 	}
 
-  public function sendSingleEmail($request) {
-    if (is_array($request)) {
-      $messages = array();
-      foreach ($request as $r) {
-        $email = new SoapVar($r, SOAP_ENC_OBJECT, 'SingleEmailMessage', $this->namespace);
-        array_push($messages, $email);
-      }
-      $arg->messages = $messages;
-      return $this->_sendEmail($arg);
-    } else {
-      $backtrace = debug_backtrace();
-      die('Please pass in array to this function:  '.$backtrace[0]['function']);
-    }
-  }
 
-  public function sendMassEmail($request) {
-    if (is_array($request)) {
-      $messages = array();
-      foreach ($request as $r) {
-        $email = new SoapVar($r, SOAP_ENC_OBJECT, 'MassEmailMessage', $this->namespace);
-        array_push($messages, $email);
-      }
-      $arg->messages = $messages;
-      return $this->_sendEmail($arg);
-    } else {
-      $backtrace = debug_backtrace();
-      die('Please pass in array to this function:  '.$backtrace[0]['function']);
-    }
-  }	
-	
+	public function sendSingleEmail($request) {
+		if (is_array($request)) {
+			$messages = array();
+			foreach ($request as $r) {
+				$email = new SoapVar($r, SOAP_ENC_OBJECT, 'SingleEmailMessage', $this->namespace);
+				array_push($messages, $email);
+			}
+			$arg->messages = $messages;
+			return $this->_sendEmail($arg);
+		} else {
+			$backtrace = debug_backtrace();
+			die('Please pass in array to this function:  '.$backtrace[0]['function']);
+		}
+	}
+
+
+	public function sendMassEmail($request) {
+		if (is_array($request)) {
+			$messages = array();
+			foreach ($request as $r) {
+				$email = new SoapVar($r, SOAP_ENC_OBJECT, 'MassEmailMessage', $this->namespace);
+				array_push($messages, $email);
+			}
+			$arg->messages = $messages;
+			return $this->_sendEmail($arg);
+		} else {
+			$backtrace = debug_backtrace();
+			die('Please pass in array to this function:  '.$backtrace[0]['function']);
+		}
+	}
+
+
 	protected function _sendEmail($arg) {
 		$this->setHeaders();
 		return $this->sforce->sendEmail($arg)->result;
 	}
 
+
 	/**
 	 * Converts a Lead into an Account, Contact, or (optionally) an Opportunity.
 	 *
-	 * @param array $leadConverts    Array of LeadConvert
+	 * @param array   $leadConverts Array of LeadConvert
 	 *
 	 * @return LeadConvertResult
 	 */
@@ -468,10 +508,11 @@ class SforceBaseClient {
 		return $this->sforce->convertLead($arg);
 	}
 
+
 	/**
 	 * Deletes one or more new individual objects to your organization's data.
 	 *
-	 * @param array $ids    Array of fields
+	 * @param array   $ids Array of fields
 	 * @return DeleteResult
 	 */
 	public function delete($ids) {
@@ -481,10 +522,11 @@ class SforceBaseClient {
 		return $this->sforce->delete($arg)->result;
 	}
 
+
 	/**
 	 * Deletes one or more new individual objects to your organization's data.
 	 *
-	 * @param array $ids    Array of fields
+	 * @param array   $ids Array of fields
 	 * @return DeleteResult
 	 */
 	public function undelete($ids) {
@@ -494,10 +536,11 @@ class SforceBaseClient {
 		return $this->sforce->undelete($arg)->result;
 	}
 
+
 	/**
 	 * Deletes one or more new individual objects to your organization's data.
 	 *
-	 * @param array $ids    Array of fields
+	 * @param array   $ids Array of fields
 	 * @return DeleteResult
 	 */
 	public function emptyRecycleBin($ids) {
@@ -507,10 +550,11 @@ class SforceBaseClient {
 		return $this->sforce->emptyRecycleBin($arg)->result;
 	}
 
+
 	/**
 	 * Process Submit Request for Approval
 	 *
-	 * @param array $processRequestArray
+	 * @param array   $processRequestArray
 	 * @return ProcessResult
 	 */
 	public function processSubmitRequest($processRequestArray) {
@@ -526,10 +570,11 @@ class SforceBaseClient {
 		}
 	}
 
+
 	/**
 	 * Process Work Item Request for Approval
 	 *
-	 * @param array $processRequestArray
+	 * @param array   $processRequestArray
 	 * @return ProcessResult
 	 */
 	public function processWorkitemRequest($processRequestArray) {
@@ -545,6 +590,7 @@ class SforceBaseClient {
 		}
 	}
 
+
 	/**
 	 * Retrieves a list of available objects for your organization's data.
 	 *
@@ -555,6 +601,7 @@ class SforceBaseClient {
 		return $this->sforce->describeGlobal()->result;
 	}
 
+
 	/**
 	 * Use describeLayout to retrieve information about the layout (presentation
 	 * of data to users) for a given object type. The describeLayout call returns
@@ -562,7 +609,7 @@ class SforceBaseClient {
 	 * display-only views and record type mappings. Note that field-level security
 	 * and layout editability affects which fields appear in a layout.
 	 *
-	 * @param string Type   Object Type
+	 * @param string  Type   Object Type
 	 * @return DescribeLayoutResult
 	 */
 	public function describeLayout($type) {
@@ -572,11 +619,12 @@ class SforceBaseClient {
 		return $this->sforce->describeLayout($arg)->result;
 	}
 
+
 	/**
 	 * Describes metadata (field list and object properties) for the specified
 	 * object.
 	 *
-	 * @param string $type    Object type
+	 * @param string  $type Object type
 	 * @return DescribsSObjectResult
 	 */
 	public function describeSObject($type) {
@@ -586,17 +634,19 @@ class SforceBaseClient {
 		return $this->sforce->describeSObject($arg)->result;
 	}
 
+
 	/**
 	 * An array-based version of describeSObject; describes metadata (field list
 	 * and object properties) for the specified object or array of objects.
 	 *
-	 * @param array $arrayOfTypes    Array of object types.
+	 * @param array   $arrayOfTypes Array of object types.
 	 * @return DescribsSObjectResult
 	 */
 	public function describeSObjects($arrayOfTypes) {
 		$this->setHeaders("describeSObjects");
 		return $this->sforce->describeSObjects($arrayOfTypes)->result;
 	}
+
 
 	/**
 	 * The describeTabs call returns information about the standard apps and
@@ -610,13 +660,14 @@ class SforceBaseClient {
 		return $this->sforce->describeTabs()->result;
 	}
 
+
 	/**
 	 * Retrieves the list of individual objects that have been deleted within the
 	 * given timespan for the specified object.
 	 *
-	 * @param string $type    Ojbect type
-	 * @param date $startDate  Start date
-	 * @param date $endDate   End Date
+	 * @param string  $type      Ojbect type
+	 * @param date    $startDate Start date
+	 * @param date    $endDate   End Date
 	 * @return GetDeletedResult
 	 */
 	public function getDeleted($type, $startDate, $endDate) {
@@ -628,13 +679,14 @@ class SforceBaseClient {
 		return $this->sforce->getDeleted($arg)->result;
 	}
 
+
 	/**
 	 * Retrieves the list of individual objects that have been updated (added or
 	 * changed) within the given timespan for the specified object.
 	 *
-	 * @param string $type    Ojbect type
-	 * @param date $startDate  Start date
-	 * @param date $endDate   End Date
+	 * @param string  $type      Ojbect type
+	 * @param date    $startDate Start date
+	 * @param date    $endDate   End Date
 	 * @return GetUpdatedResult
 	 */
 	public function getUpdated($type, $startDate, $endDate) {
@@ -646,28 +698,30 @@ class SforceBaseClient {
 		return $this->sforce->getUpdated($arg)->result;
 	}
 
+
 	/**
 	 * Executes a query against the specified object and returns data that matches
 	 * the specified criteria.
 	 *
-	 * @param String $query Query String
-	 * @param QueryOptions $queryOptions  Batch size limit.  OPTIONAL
+	 * @param String  $query        Query String
+	 * @param QueryOptions $queryOptions Batch size limit.  OPTIONAL
 	 * @return QueryResult
 	 */
 	public function query($query) {
 		$this->setHeaders("query");
 		$QueryResult = $this->sforce->query(array (
-                      'queryString' => $query
-		))->result;
+				'queryString' => $query
+			))->result;
 		$this->_handleRecords($QueryResult);
 		return $QueryResult;
 	}
+
 
 	/**
 	 * Retrieves the next batch of objects from a query.
 	 *
 	 * @param QueryLocator $queryLocator Represents the server-side cursor that tracks the current processing location in the query result set.
-	 * @param QueryOptions $queryOptions  Batch size limit.  OPTIONAL
+	 * @param QueryOptions $queryOptions Batch size limit.  OPTIONAL
 	 * @return QueryResult
 	 */
 	public function queryMore($queryLocator) {
@@ -679,18 +733,19 @@ class SforceBaseClient {
 		return $QueryResult;
 	}
 
+
 	/**
 	 * Retrieves data from specified objects, whether or not they have been deleted.
 	 *
-	 * @param String $query Query String
-	 * @param QueryOptions $queryOptions  Batch size limit.  OPTIONAL
+	 * @param String  $query        Query String
+	 * @param QueryOptions $queryOptions Batch size limit.  OPTIONAL
 	 * @return QueryResult
 	 */
 	public function queryAll($query, $queryOptions = NULL) {
 		$this->setHeaders("queryAll");
 		$QueryResult = $this->sforce->queryAll(array (
-                        'queryString' => $query
-		))->result;
+				'queryString' => $query
+			))->result;
 		$this->_handleRecords($QueryResult);
 		return $QueryResult;
 	}
@@ -700,7 +755,7 @@ class SforceBaseClient {
 		if ($QueryResult->size > 0) {
 			if ($QueryResult->size == 1) {
 				$recs = array (
-				$QueryResult->records
+					$QueryResult->records
 				);
 			} else {
 				$recs = $QueryResult->records;
@@ -709,12 +764,13 @@ class SforceBaseClient {
 		}
 	}
 
+
 	/**
 	 * Retrieves one or more objects based on the specified object IDs.
 	 *
-	 * @param string $fieldList      One or more fields separated by commas.
-	 * @param string $sObjectType    Object from which to retrieve data.
-	 * @param array $ids            Array of one or more IDs of the objects to retrieve.
+	 * @param string  $fieldList   One or more fields separated by commas.
+	 * @param string  $sObjectType Object from which to retrieve data.
+	 * @param array   $ids         Array of one or more IDs of the objects to retrieve.
 	 * @return sObject[]
 	 */
 	public function retrieve($fieldList, $sObjectType, $ids) {
@@ -726,10 +782,11 @@ class SforceBaseClient {
 		return $this->sforce->retrieve($arg)->result;
 	}
 
+
 	/**
 	 * Executes a text search in your organization's data.
 	 *
-	 * @param string $searchString   Search string that specifies the text expression to search for.
+	 * @param string  $searchString Search string that specifies the text expression to search for.
 	 * @return SearchResult
 	 */
 	public function search($searchString) {
@@ -738,6 +795,7 @@ class SforceBaseClient {
 		$arg->searchString = new SoapVar($searchString, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
 		return $this->sforce->search($arg)->result;
 	}
+
 
 	/**
 	 * Retrieves the current system timestamp (GMT) from the Web service.
@@ -749,16 +807,18 @@ class SforceBaseClient {
 		return $this->sforce->getServerTimestamp()->result;
 	}
 
+
 	public function getUserInfo() {
 		$this->setHeaders("getUserInfo");
 		return $this->sforce->getUserInfo()->result;
 	}
 
+
 	/**
 	 * Sets the specified user's password to the specified value.
 	 *
-	 * @param string $userId    ID of the User.
-	 * @param string $password  New password
+	 * @param string  $userId   ID of the User.
+	 * @param string  $password New password
 	 */
 	public function setPassword($userId, $password) {
 		$this->setHeaders("setPassword");
@@ -768,10 +828,11 @@ class SforceBaseClient {
 		return $this->sforce->setPassword($arg);
 	}
 
+
 	/**
 	 * Changes a user's password to a system-generated value.
 	 *
-	 * @param string $userId    Id of the User
+	 * @param string  $userId Id of the User
 	 * @return password
 	 */
 	public function resetPassword($userId) {
@@ -780,5 +841,9 @@ class SforceBaseClient {
 		$arg->userId = new SoapVar($userId, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
 		return $this->sforce->resetPassword($arg)->result;
 	}
+
+
 }
+
+
 ?>

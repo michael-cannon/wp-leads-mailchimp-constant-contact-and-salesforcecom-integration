@@ -24,86 +24,99 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once ('SforceBaseClient.php');
+require_once 'SforceBaseClient.php';
 
 /**
  * This file contains two classes.
+ *
  * @package SalesforceSoapClient
  */
+
+
 /**
  * SforceEnterpriseClient class.
  *
  * @package SalesforceSoapClient
  */
 class SforceEnterpriseClient extends SforceBaseClient {
-  const ENTERPRISE_NAMESPACE = 'urn:enterprise.soap.sforce.com';
+	const ENTERPRISE_NAMESPACE = 'urn:enterprise.soap.sforce.com';
 
-  function SforceEnterpriseClient() {
-    $this->namespace = self::ENTERPRISE_NAMESPACE;
-  }
+	function SforceEnterpriseClient() {
+		$this->namespace = self::ENTERPRISE_NAMESPACE;
+	}
 
-  /**
-   * Adds one or more new individual objects to your organization's data.
-   * @param array $sObjects    Array of one or more sObjects (up to 200) to create.
-   * @param AssignmentRuleHeader $assignment_header is optional.  Defaults to NULL
-   * @param MruHeader $mru_header is optional.  Defaults to NULL
-   * @return SaveResult
-   */
-  public function create($sObjects, $type) {
-    foreach ($sObjects as &$sobject) {
-      $sobject = new SoapVar($sobject, SOAP_ENC_OBJECT, $type, $this->namespace);
-    }
-    $arg = $sObjects;
 
-    return parent::_create(new SoapParam($arg, "sObjects"));
-  }
+	/**
+	 * Adds one or more new individual objects to your organization's data.
+	 *
+	 * @param array   $sObjects          Array of one or more sObjects (up to 200) to create.
+	 * @param AssignmentRuleHeader $assignment_header is optional.  Defaults to NULL
+	 * @param MruHeader $mru_header        is optional.  Defaults to NULL
+	 * @return SaveResult
+	 */
+	public function create($sObjects, $type) {
+		foreach ($sObjects as &$sobject) {
+			$sobject = new SoapVar($sobject, SOAP_ENC_OBJECT, $type, $this->namespace);
+		}
+		$arg = $sObjects;
 
-  /**
-   * Updates one or more new individual objects to your organization's data.
-   * @param array sObjects    Array of sObjects
-   * @param AssignmentRuleHeader $assignment_header is optional.  Defaults to NULL
-   * @param MruHeader $mru_header is optional.  Defaults to NULL
-   * @return UpdateResult
-   */
-  public function update($sObjects, $type, $assignment_header = NULL, $mru_header = NULL) {
-    foreach ($sObjects as &$sObject) {
-      $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
-    }
-    $arg->sObjects = $sObjects;
-    return parent::_update($arg);
-  }
+		return parent::_create(new SoapParam($arg, "sObjects"));
+	}
 
-  /**
-   * Creates new objects and updates existing objects; uses a custom field to
-   * determine the presence of existing objects. In most cases, we recommend
-   * that you use upsert instead of create because upsert is idempotent.
-   * Available in the API version 7.0 and later.
-   *
-   * @param string $ext_Id        External Id
-   * @param array  $sObjects  Array of sObjects
-   * @return UpsertResult
-   */
-  public function upsert($ext_Id, $sObjects) {
-    $arg = new stdClass;
-    $arg->externalIDFieldName = new SoapVar($ext_Id, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
-    foreach ($sObjects as &$sObject) {
-      $sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, 'Contact', $this->namespace);
-    }
-    $arg->sObjects = $sObjects;
-    return parent::_upsert($arg);
-  }
 
-  /**
-   * Merge records
-   *
-   * @param stdclass $mergeRequest
-   * @param String $type
-   * @return unknown
-   */
-  public function merge($mergeRequest, $type) {
-    $mergeRequest->masterRecord = new SoapVar($mergeRequest->masterRecord, SOAP_ENC_OBJECT, $type, $this->namespace);
-    $arg->request = new SoapVar($mergeRequest, SOAP_ENC_OBJECT, 'MergeRequest', $this->namespace);
-    return parent::_merge($arg);
-  }
+	/**
+	 * Updates one or more new individual objects to your organization's data.
+	 *
+	 * @param array   sObjects    Array of sObjects
+	 * @param AssignmentRuleHeader $assignment_header is optional.  Defaults to NULL
+	 * @param MruHeader $mru_header        is optional.  Defaults to NULL
+	 * @return UpdateResult
+	 */
+	public function update($sObjects, $type, $assignment_header = NULL, $mru_header = NULL) {
+		foreach ($sObjects as &$sObject) {
+			$sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
+		}
+		$arg->sObjects = $sObjects;
+		return parent::_update($arg);
+	}
+
+
+	/**
+	 * Creates new objects and updates existing objects; uses a custom field to
+	 * determine the presence of existing objects. In most cases, we recommend
+	 * that you use upsert instead of create because upsert is idempotent.
+	 * Available in the API version 7.0 and later.
+	 *
+	 * @param string  $ext_Id   External Id
+	 * @param array   $sObjects Array of sObjects
+	 * @return UpsertResult
+	 */
+	public function upsert($ext_Id, $sObjects) {
+		$arg = new stdClass;
+		$arg->externalIDFieldName = new SoapVar($ext_Id, XSD_STRING, 'string', 'http://www.w3.org/2001/XMLSchema');
+		foreach ($sObjects as &$sObject) {
+			$sObject = new SoapVar($sObject, SOAP_ENC_OBJECT, 'Contact', $this->namespace);
+		}
+		$arg->sObjects = $sObjects;
+		return parent::_upsert($arg);
+	}
+
+
+	/**
+	 * Merge records
+	 *
+	 * @param stdclass $mergeRequest
+	 * @param String  $type
+	 * @return unknown
+	 */
+	public function merge($mergeRequest, $type) {
+		$mergeRequest->masterRecord = new SoapVar($mergeRequest->masterRecord, SOAP_ENC_OBJECT, $type, $this->namespace);
+		$arg->request = new SoapVar($mergeRequest, SOAP_ENC_OBJECT, 'MergeRequest', $this->namespace);
+		return parent::_merge($arg);
+	}
+
+
 }
+
+
 ?>

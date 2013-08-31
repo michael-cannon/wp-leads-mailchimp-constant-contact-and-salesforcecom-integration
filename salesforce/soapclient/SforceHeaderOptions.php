@@ -27,6 +27,7 @@
 
 /**
  * This file contains three classes.
+ *
  * @package SalesforceSoapClient
  */
 
@@ -39,6 +40,8 @@ class CallOptions {
 		$this->client = $client;
 		$this->defaultNamespace = $defaultNamespace;
 	}
+
+
 }
 
 
@@ -58,8 +61,8 @@ class AssignmentRuleHeader {
 	/**
 	 * Constructor.  Only one param can be set.
 	 *
-	 * @param int $id  AssignmentRuleId
-	 * @param boolean $flag  UseDefaultRule flag
+	 * @param int     $id   AssignmentRuleId
+	 * @param boolean $flag UseDefaultRule flag
 	 */
 	public function __construct($id = NULL, $flag = NULL) {
 		if ($id != NULL) {
@@ -69,7 +72,10 @@ class AssignmentRuleHeader {
 			$this->useDefaultRuleFlag = $flag;
 		}
 	}
+
+
 }
+
 
 /**
  * To be used with Create and Update operations.
@@ -83,7 +89,10 @@ class MruHeader {
 	public function __construct($bool) {
 		$this->updateMruFlag = $bool;
 	}
+
+
 }
+
 
 /**
  * To be used with the Login operation.
@@ -91,15 +100,18 @@ class MruHeader {
  * @package SalesforceSoapClient
  */
 class LoginScopeHeader {
-  // boolean that Indicates whether to update the list of most recently used items (True) or not (False).
-  public $organizationId;
-  public $portalId;
+	// boolean that Indicates whether to update the list of most recently used items (True) or not (False).
+	public $organizationId;
+	public $portalId;
 
-  public function __construct($orgId = NULL, $portalId = NULL) {
-    $this->organizationId = $orgId;
-    $this->portalId = $portalId;
-  }
+	public function __construct($orgId = NULL, $portalId = NULL) {
+		$this->organizationId = $orgId;
+		$this->portalId = $portalId;
+	}
+
+
 }
+
 
 /**
  * To be used with Retrieve, Query, and QueryMore operations.
@@ -113,12 +125,15 @@ class QueryOptions {
 	/**
 	 * Constructor
 	 *
-	 * @param int $limit  Batch size
+	 * @param int     $limit Batch size
 	 */
 	public function __construct($limit) {
 		$this->batchSize = $limit;
 	}
+
+
 }
+
 
 class EmailHeader {
 	public $triggerAutoResponseEmail;
@@ -130,7 +145,10 @@ class EmailHeader {
 		$this->triggerOtherEmail = $triggerOtherEmail;
 		$this->triggerUserEmail = $triggerUserEmail;
 	}
+
+
 }
+
 
 class UserTerritoryDeleteHeader {
 	public $transferToUserId;
@@ -138,5 +156,9 @@ class UserTerritoryDeleteHeader {
 	public function __construct($transferToUserId) {
 		$this->transferToUserId = $transferToUserId;
 	}
+
+
 }
+
+
 ?>

@@ -11,6 +11,7 @@
 * Corect `wp_enqueue_scripts` action call
 * Correct __FILENAME__ constant usage
 * General bail if `get_wp_settings` is empty
+* Initial pass on coding standards
 * Prep for localization
 * Test current actions
 * Update support link

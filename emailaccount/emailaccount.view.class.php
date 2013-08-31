@@ -1,16 +1,18 @@
-<?
-class WPLeadsEmailAccountView{
+<?php
+class WPLeadsEmailAccountView {
 	/**
-     * Displays the administrator's EmailAccount Integration configuration form to retrieve the EmailAccount API Key
-     *
-     * @param array $messages if provided, delivers status updates to the user, as they occur.
-     *
-     */
-	static function configureEmailaccount($messages=null){
+	 * Displays the administrator's EmailAccount Integration configuration form to retrieve the EmailAccount API Key
+	 *
+	 * @param array   $messages if provided, delivers status updates to the user, as they occur.
+	 *
+	 */
+
+
+	static function configureEmailaccount($messages=null) {
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$currentCredentials=WPLeadsEmailAccountController::get_wp_settings();
 		WPLeadsInterfaceView::formJquery();
-		?>
+?>
 		<div id="icon-link-manager" class="icon32">
 			<br></div>
 			<h2>Email Account Configuration <a href="?page=wpleads_configuration" class="add-new-h2">Go Back</a>
@@ -42,7 +44,7 @@ class WPLeadsEmailAccountView{
 								</div>
 							</div>
 						</div>
-									
+
 						<div id="post-body">
 							<div id="post-body-content">
 								<div class="stuffbox">
@@ -53,11 +55,13 @@ class WPLeadsEmailAccountView{
 										<input name="emailaccount_email" size="50" tabindex="1" value="<?php echo $currentCredentials["email"]; ?>" type="text" />
 										<p>Help: To receive an email alert every time your contact form is submitted, enter a valid email address above.</p>
 									</div>
-								</div>					
+								</div>
 							</div>
 						</div>
-					</div>						
+					</div>
 				</form>
-<?
+<?php
 	}
+
+
 }

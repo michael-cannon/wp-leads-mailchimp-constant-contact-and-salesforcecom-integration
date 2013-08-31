@@ -1,21 +1,23 @@
-<?
-class WPLeadsMailChimpView{
+<?php
+class WPLeadsMailChimpView {
 	/**
-     * Displays the administrator's MailChimp Integration configuration form to retrieve the MailChimp API Key
-     *
-     * @param array $messages if provided, delivers status updates to the user, as they occur.
-     *
-     */
-	static function configureMailchimp($messages=null){
+	 * Displays the administrator's MailChimp Integration configuration form to retrieve the MailChimp API Key
+	 *
+	 * @param array   $messages if provided, delivers status updates to the user, as they occur.
+	 *
+	 */
+
+
+	static function configureMailchimp($messages=null) {
 		//define the current key.  If current key is now invalid, reset to null and display error
 		$currentKey=WPLeadsMailChimpController::get_valid_mailchimp_key();
 		$lists=WPLeadsMailChimpController::get_lists();
-		if(WPLeadsInterface::isError($currentKey)) { 
+		if (WPLeadsInterface::isError($currentKey)) {
 			$messages["errors"]=array("Your MailChimp API key is no longer valid.  Please enter a new API Key below.");
 			$currentKey=null;
 		}
 		WPLeadsInterfaceView::formJquery();
-		?>
+?>
 		<div id="icon-link-manager" class="icon32">
 			<br></div>
 			<h2>MailChimp Configuration <a href="?page=wpleads_configuration" class="add-new-h2">Go Back</a>
@@ -48,7 +50,7 @@ class WPLeadsMailChimpView{
 								<?php echo WPLeadsInterfaceView::helpWPLeadsPlease(); ?>
 							</div>
 						</div>
-									
+
 						<div id="post-body">
 							<div id="post-body-content">
 								<div class="stuffbox">
@@ -60,26 +62,28 @@ class WPLeadsMailChimpView{
 										<p>Note: If you do not already have a MailChimp API Key, <a href="http://kb.mailchimp.com/article/where-can-i-find-my-api-key/" target="_blank">follow these instructions to create one.</a></p>
 									</div>
 								</div>
-												
+
 								<div class="stuffbox">
 									<h3>
 										<label for="link_url">MailChimp List Selection</label>
 									</h3>
-													
+
 									<div class="inside">
 										<?php
-										if($lists!=""){
-											echo $lists;
-										}else{
-											echo "<p>You must set your API Key before you can configure this option.</p>";
-										}
-										?>
+		if ($lists!="") {
+			echo $lists;
+		}else {
+			echo "<p>You must set your API Key before you can configure this option.</p>";
+		}
+?>
 									</div>
-								</div>							
+								</div>
 							</div>
 						</div>
-					</div>						
+					</div>
 				</form>
-<?
+<?php
 	}
+
+
 }
