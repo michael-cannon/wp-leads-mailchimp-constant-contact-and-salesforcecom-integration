@@ -1,10 +1,12 @@
 === WP-Leads ===
 Contributors: OccamsRazzor,comprock
-Donate link: http://www.wpleads.com/donate
+Donate link: http://aihr.us/about-aihrus/donate/
 Tags: MailChimp, Constant Contact, SalesForce.com, Integration
 Requires at least: 3.0.0
-Tested up to: 3.2.0
+Tested up to: 3.6.0
 Stable tag: 1.2.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Seamlessly integrates the Wordpress registration and comment forms with MailChimp, Constant Contact, and SalesForce.com
 
@@ -38,7 +40,18 @@ Setup allows you to change the way the plugin looks on the Registration and Comm
 
 The Integrations allow you to configure the MailChimp, SalesForce.com, and Constant Contact APIs.  Essentially, the plugin will request your API Key and other related credentials for each system.  Once authenticated, you can then select which list(s) you'd like to send your leads to.  
 
+
+== Frequently Asked Questions ==
+
+Support is provided via the [WP-Leads support forums](http://wordpress.org/support/plugin/wp-leads-mailchimp-constant-contact-and-salesforcecom-integration) on WordPress.
+
 == Screenshots ==
+
+1. WP Leads Setup
+2. WP Leads Integration Options
+3. MailChimp Configuration
+4. Comment form join mailing list checkbox
+
 
 == Changelog ==
 
@@ -50,5 +63,4 @@ The Integrations allow you to configure the MailChimp, SalesForce.com, and Const
 
 == Upgrade Notice ==
 
-= 1.2.1 =
-* Comment Forms are now Integrated. You can now easily integrate your site's discussions with your lead management systems. 
+* None

@@ -1,31 +1,34 @@
 <?php
-/*
+/**
 Plugin Name: WP-Leads (Free) - MailChimp, Constant Contact, and SalesForce.com Integration
-Plugin URI: http://www.wpleads.com
+Original Plugin URI: http://www.wpleads.com
+Plugin URI: http://wordpress.org/plugins/wp-leads-mailchimp-constant-contact-and-salesforcecom-integration/
 Description: Integrating with MailChimp, Constant Contact, and SalesForce.com is now a snap.  Once configured, users can be asked to join your mailing list through the WordPress Registration process or through the Comments form.
 Version: 1.2
-Author: Anthony Leon
-Author URI: http://www.wpleads.com
+Author: Michael Cannon
+Original Author: Anthony Leon
+Author URI: http://aihr.us
+Original Author URI: http://www.wpleads.com
 License: GPLv2
 Usage: Set as many or as few integration options as you like.  Once configured, user information will be sent automatically to your Lead Management Systems, such as MailChimp, Constant Contact, and SalesForce.com.  Simple.  For more detailed instructions, visit http://www.WPLeads.com
 
-    Copyright (c) 2010-2011  Anthony Leon (email : questions@wpleads.com)
+	Copyright (c) 2010-2011  Anthony Leon (email : questions@wpleads.com)
 
 	The name WP-Leads(tm) is a trademark of TalkLearn.com
 
 	This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
+	it under the terms of the GNU General Public License, version 2, as
+	published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 /*
 	A NOTE ABOUT LICENSE:
 
@@ -44,9 +47,8 @@ Usage: Set as many or as few integration options as you like.  Once configured, 
 
 	INSTALLATION PROCEDURE:
 
-	For complete installation and usage instructions,
-	visit http://www.wpleads.com
-*/
+	For complete installation and usage instructions, visit http://wordpress.org/plugins/wp-leads-mailchimp-constant-contact-and-salesforcecom-integration/
+ */
 ini_set('soap.wsdl_cache_enabled', 0);
 //mail chimp configuration
 require_once 'mailchimp/MCAPI.class.php';
@@ -106,6 +108,7 @@ function wpleads_install() {
 	add_option('wpleads_setup_commentform_activated', array('comment_activated'=>0), '', 'yes');
 	add_option('wpleads_setup_commentform_text', array('comment_text'=>'Join our Mailing List?'), '', 'yes');
 	add_option('wpleads_setup_commentform_selected', array('comment_selected'=>1), '', 'yes');
+	add_option('wpleads_setup_delete_data_activated', array('delete_data'=>0), '', 'yes');
 }
 
 
@@ -116,7 +119,7 @@ function wpleads_uninstall() {
 
 	delete_option('wplead_active'); //set the activation flag to false
 	delete_option('wplead_settings'); //reset the API key to null.
-	
+
 	// mailchimp
 	delete_option('wpleads_mailchimp_apikey');
 	delete_option('wpleads_mailchimp_listid');
