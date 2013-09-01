@@ -32,6 +32,9 @@ class WPLeadsInterface {
 			WPLeadsInterface::set_wpleads_setup_commentform_activated($_REQUEST["comment_activated"]);
 			$messages["successes"][]="Oh No. Users are not being asked to join your mailing list at all.";
 		}
+		
+		WPLeadsInterface::set_wpleads_setup_delete_data_activated($_REQUEST["delete_data"]);
+
 		return $messages;
 	}
 
@@ -180,6 +183,11 @@ class WPLeadsInterface {
 	}
 
 
+	static function set_wpleads_setup_delete_data_activated($isActivated) {
+		update_option('wpleads_setup_delete_data_activated', array("delete_data"=>$isActivated));
+	}
+
+
 	static function set_wpleads_setup_commentform_selected($isSelected) {
 		update_option('wpleads_setup_commentform_selected', array("comment_selected"=>$isSelected));
 	}
@@ -198,6 +206,7 @@ class WPLeadsInterface {
 		$comment_activated=get_option("wpleads_setup_commentform_activated");
 		$comment_text=get_option("wpleads_setup_commentform_text");
 		$comment_selected=get_option("wpleads_setup_commentform_selected");
+		$delete_data=get_option("wpleads_setup_delete_data_activated");
 		$return=array(
 			"activated"=>$activated["activated"],
 			"firstlast"=>$firstlast["firstlast"],
@@ -205,7 +214,8 @@ class WPLeadsInterface {
 			"selected"=>$selected["selected"],
 			"comment_activated"=>$comment_activated["comment_activated"],
 			"comment_text"=>$comment_text["comment_text"],
-			"comment_selected"=>$comment_selected["comment_selected"]
+			"comment_selected"=>$comment_selected["comment_selected"],
+			"delete_data"=>$delete_data["delete_data"],
 		);
 		$return=WPLeadsInterface::sanitizeData($return);
 		return $return;

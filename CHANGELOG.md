@@ -4,6 +4,7 @@
 
 ## notices
 * Add continuous integration helpers
+* Add delete data on uninstall option
 * Add developer docs
 * Clean up PHP notices
 * Consolidate install add_option/update_option calls

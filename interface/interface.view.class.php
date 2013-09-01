@@ -135,6 +135,17 @@ class WPLeadsInterfaceView {
 
 								<div class="stuffbox">
 									<h3>
+										<label for="link_name">Plugin Data</label>
+									</h3>
+									<div class="inside">
+										<table width="100%">
+											<tr><td style="width: 30%">Remove plugin data on delete?</td><td style="width: 70%"><select name="delete_data"><option value="1">Yes</option><option value="0"<?php if (!$setup["delete_data"]) { echo " selected";}?>>No</option></select></td></tr>
+										</table>
+									</div>
+								</div>
+
+								<div class="stuffbox">
+									<h3>
 										<label for="link_url">Helpful Information</label>
 									</h3>
 

@@ -109,33 +109,42 @@ function wpleads_install() {
 }
 
 
-function wpleads_deactivate() {
+function wpleads_uninstall() {
+	$settings = WPLeadsInterface::get_wp_settings();
+	if ( empty( $settings['delete_data'] ) )
+		return;
+
 	delete_option('wplead_active'); //set the activation flag to false
 	delete_option('wplead_settings'); //reset the API key to null.
-	//mailchimp
+	
+	// mailchimp
 	delete_option('wpleads_mailchimp_apikey');
 	delete_option('wpleads_mailchimp_listid');
 	delete_option('wpleads_mailchimp_last_updated');
 	delete_option('wpleads_mailchimp_configured');
-	//constant contact variables
+
+	// constant contact variables
 	delete_option('wpleads_constantcontact_apiusername');
 	delete_option('wpleads_constantcontact_apipassword');
 	delete_option('wpleads_constantcontact_apikey');
 	delete_option('wpleads_constantcontact_listid');
 	delete_option('wpleads_constantcontact_last_updated');
 	delete_option('wpleads_constantcontact_configured');
-	//email account
+
+	// email account
 	delete_option('wpleads_emailaccount_email');
 	delete_option('wpleads_emailaccount_last_updated');
 	delete_option('wpleads_emailaccount_configured');
-	//SalesForce.com
+
+	// SalesForce.com
 	delete_option('wpleads_salesforce_apiusername');
 	delete_option('wpleads_salesforce_apipassword');
 	delete_option('wpleads_salesforce_apikey');
 	delete_option('wpleads_salesforce_listid');
 	delete_option('wpleads_salesforce_last_updated');
 	delete_option('wpleads_salesforce_configured');
-	//setup
+
+	// setup
 	delete_option('wpleads_setup_registration_activated');
 	delete_option('wpleads_setup_registration_firstlast');
 	delete_option('wpleads_setup_registration_selected');
@@ -143,12 +152,13 @@ function wpleads_deactivate() {
 	delete_option('wpleads_setup_commentform_activated');
 	delete_option('wpleads_setup_commentform_selected');
 	delete_option('wpleads_setup_commentform_text');
+	delete_option('wpleads_setup_delete_data_activated');
 }
 
 
-//register basic activation / deactivation hooks for the MailChimp Integration
+//register basic activation / uninstall hooks
 register_activation_hook(__FILE__, 'wpleads_install');
-register_deactivation_hook(__FILE__, 'wpleads_deactivate');
+register_uninstall_hook(__FILE__, 'wpleads_uninstall');
 
 //define some basic variables for the system.
 define('WPLEADS_PLUGINPATH', '/'.plugin_basename(dirname(__FILE__)).'/');
